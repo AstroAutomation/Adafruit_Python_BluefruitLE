@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 from .provider import Provider
 from .adapter import Adapter
 from .device import Device

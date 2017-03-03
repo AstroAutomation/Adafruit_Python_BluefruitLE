@@ -3,6 +3,8 @@
 # Author: Tony DiCola
 import Adafruit_BluefruitLE
 from Adafruit_BluefruitLE.services import UART
+# import time
+
 
 
 # Get the BLE provider for the current platform.
@@ -33,18 +35,25 @@ def main():
     print('Searching for UART device...')
     try:
         adapter.start_scan()
-        # Search for the first UART device found (will time out after 60 seconds
-        # but you can specify an optional timeout_sec parameter to change it).
-        device = UART.find_device()
-        if device is None:
-            raise RuntimeError('Failed to find UART device!')
+        while True:
+            # Search for the first UART device found (will time out after 60 seconds
+            # but you can specify an optional timeout_sec parameter to change it).
+            # device = UART.find_device()
+            device = UART.find_device()
+            # print('Device: {}'.format(dir(device)))
+            # print('Device detail: {}'.format(device.discover))
+            for i in device:
+                print('Device: {}'.format(i.name))
+
+            if device is None:
+                raise RuntimeError('Failed to find UART device!')
     finally:
         # Make sure scanning is stopped before exiting.
         adapter.stop_scan()
 
     print('Connecting to device...')
     device.connect()  # Will time out after 60 seconds, specify timeout_sec parameter
-                      # to change the timeout.
+                    #   to change the timeout.
 
     # Once connected do everything else in a try/finally to make sure the device
     # is disconnected when done.

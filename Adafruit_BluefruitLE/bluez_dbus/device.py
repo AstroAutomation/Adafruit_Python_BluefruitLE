@@ -137,6 +137,12 @@ class BluezDevice(Device):
         return [uuid.UUID(str(x)) for x in uuids]
 
     @property
+    def manufacturerData(self):
+        """Return manufacturer custom advertisement data for this device
+        """
+        return self._props.Get(_INTERFACE, 'ManufacturerData')
+
+    @property
     def id(self):
         """Return a unique identifier for this device.  On supported platforms
         this will be the MAC address of the device, however on unsupported

@@ -61,6 +61,12 @@ class Device(object):
         raise NotImplementedError
 
     @abc.abstractproperty
+    def manufacturerData(self):
+        """Return manufacturer custom advertisement data for this device
+        """
+        raise NotImplementedError
+
+    @abc.abstractproperty
     def id(self):
         """Return a unique identifier for this device.  On supported platforms
         this will be the MAC address of the device, however on unsupported
