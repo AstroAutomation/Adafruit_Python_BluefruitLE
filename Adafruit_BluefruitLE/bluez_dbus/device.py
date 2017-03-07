@@ -140,7 +140,7 @@ class BluezDevice(Device):
     def manufacturerData(self):
         """Return manufacturer custom advertisement data for this device
         """
-        manufacturer_data = None
+        manufacturer_data = []
         try:
             manufacturer_data = self._props.Get(_INTERFACE, 'ManufacturerData')
         except dbus.exceptions.DBusException as ex:
