@@ -140,7 +140,15 @@ class BluezDevice(Device):
     def manufacturerData(self):
         """Return manufacturer custom advertisement data for this device
         """
-        return self._props.Get(_INTERFACE, 'ManufacturerData')
+        manufacturer_data = None
+        try:
+            manufacturer_data = self._props.Get(_INTERFACE, 'ManufacturerData')
+        except dbus.exceptions.DBusException as ex:
+            # Ignore error if device has no ManufacturerData property (i.e. might not be
+            # a BLE device).
+            if ex.get_dbus_name() != 'org.freedesktop.DBus.Error.InvalidArgs':
+                raise ex
+        return manufacturer_data
 
     @property
     def id(self):
