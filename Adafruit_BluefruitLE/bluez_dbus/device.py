@@ -148,23 +148,14 @@ class BluezDevice(Device):
         except dbus.exceptions.DBusException as ex:
             print(ex)
             return result
-        #values = [[str(byte_info) for byte_info in value] for key, value in manufacturer_data.items()]
+
 	manu_info = struct.pack(">H", int(manufacturer_data.keys()[0]))
-	#manu_info_byte_string = struct.pack(">H", manu_info)
         result += manu_info
 
 	for byte_info in manufacturer_data.values()[0]:
 	    result += str(byte_info)
-	# manu_info_byte_array = list(manu_info_byte_string)
-	# values = [byte_info for byte_info in manufacturer_data.values()[0]]
-	# result[0].insert(0, manu_info) 
-	# result.append(manu_info_bytes)
-	# result.extend(values)
-	# return result[0]
 
-	#result = manu_info_byte_string + values
 	return result
-	#return manufacturer_data
 
     @property
     def id(self):
