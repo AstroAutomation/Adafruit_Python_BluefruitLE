@@ -25,6 +25,7 @@ from collections import Counter
 import threading
 import time
 import uuid
+import struct
 
 import dbus
 
@@ -140,16 +141,30 @@ class BluezDevice(Device):
     def manufacturerData(self):
         """Return manufacturer custom advertisement data for this device
         """
-        manufacturer_data = []
+        manufacturer_data = None
+	result = ''
         try:
             manufacturer_data = self._props.Get(_INTERFACE, 'ManufacturerData')
         except dbus.exceptions.DBusException as ex:
             print(ex)
-            # Ignore error if device has no ManufacturerData property (i.e. might not be
-            # a BLE device).
-            # if ex.get_dbus_name() != 'org.freedesktop.DBus.Error.InvalidArgs':
-            #     raise ex
-        return manufacturer_data
+            return result
+        #values = [[str(byte_info) for byte_info in value] for key, value in manufacturer_data.items()]
+	manu_info = struct.pack(">H", int(manufacturer_data.keys()[0]))
+	#manu_info_byte_string = struct.pack(">H", manu_info)
+        result += manu_info
+
+	for byte_info in manufacturer_data.values()[0]:
+	    result += str(byte_info)
+	# manu_info_byte_array = list(manu_info_byte_string)
+	# values = [byte_info for byte_info in manufacturer_data.values()[0]]
+	# result[0].insert(0, manu_info) 
+	# result.append(manu_info_bytes)
+	# result.extend(values)
+	# return result[0]
+
+	#result = manu_info_byte_string + values
+	return result
+	#return manufacturer_data
 
     @property
     def id(self):
@@ -162,7 +177,14 @@ class BluezDevice(Device):
     @property
     def name(self):
         """Return the name of this device."""
-        return self._props.Get(_INTERFACE, 'Name')
+        _name = None
+        try:
+	    _name = self._props.Get(_INTERFACE, 'Name')
+        except dbus.exceptions.DBusException as ex:
+            # Ignore error if device has no name property (i.e. might not be
+            # a BLE device).
+            print(ex)
+	return _name
 
     @property
     def is_connected(self):
