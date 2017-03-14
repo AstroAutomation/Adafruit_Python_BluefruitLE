@@ -40,7 +40,7 @@ class CoreBluetoothDevice(Device):
         """
         self._peripheral = peripheral
         self._advertised = []
-        self._manufacturerData = None
+        self._manufacturerData = []
         self._discovered_services = set()
         self._char_on_changed = {}
         self._rssi = None
@@ -98,7 +98,7 @@ class CoreBluetoothDevice(Device):
         if 'kCBAdvDataServiceUUIDs' in advertised:
             self._advertised = map(cbuuid_to_uuid, advertised['kCBAdvDataServiceUUIDs'])
         if 'kCBAdvDataManufacturerData' in advertised:
-            self._manufacturerData = advertised['kCBAdvDataManufacturerData']
+            self._manufacturerData.append(advertised['kCBAdvDataManufacturerData'])
 
     def _characteristics_discovered(self, service):
         """Called when GATT characteristics have been discovered."""
